@@ -9,7 +9,18 @@ function getComputerChoice() {
         return 'Scissors';
     }
 }
-for (let i = 1; i<5; i+=1) {
-    console.log(getComputerChoice())
+
+function getUserChoice() {
+    let message = "Please enter 'Rock', 'Paper' or 'Scissors'.";
+    playerSelection = prompt(message);
+    playerSelection = playerSelection.toLowerCase();
+    firstLetter = playerSelection.slice(0,1);
+    firstLetter = firstLetter.toUpperCase();
+    playerSelection = firstLetter + playerSelection.slice(1);
+    return playerSelection;
 }
+
+
+console.log(getUserChoice())
+
 

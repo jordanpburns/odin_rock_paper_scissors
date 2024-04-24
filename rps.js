@@ -1,7 +1,18 @@
+let playerScore = 0;
+let computerScore = 0;
+
+const buttonsContainer = document.querySelector("#buttonsContainer");
+const messageDiv = document.querySelector("#message");
+const scoreDiv = document.querySelector("#score");
+const body = document.querySelector("body");
+
+scoreDiv.textContent = `Player Score: ${playerScore} Computer Score: ${computerScore}`
+
 function getComputerChoice() {
     randomNumber = Math.floor(Math.random() * 3);
     return randomNumber;
 }
+
 function playRound(playerSelection, computerSelection) {
     const moves = ["rock", "paper", "scissors"];
     let resultString;
@@ -23,26 +34,58 @@ function playRound(playerSelection, computerSelection) {
     } else {
         resultString = "Error, nobody wins!"
     }
-    console.log(resultString)
-    return resultString;
-}
+    messageDiv.textContent = `You chose ${moves[playerSelection]} and computer chose ${moves[computerSelection]}. ${resultString}`;
+    scoreDiv.textContent = `Player Score: ${playerScore} Computer Score: ${computerScore}`
 
-function playGame() {
-    for (i = 0; i < 5; i = i + 1) {
-        playerSelection = prompt("Please choose rock, paper or scissors.")
-        computerSelection = getComputerChoice()
-        playRound(playerSelection, computerSelection)
+    if (playerScore == 5) {
+        messageDiv.textContent = "You won!!";
+        gameOver();
+
+    } else if (computerScore == 5) {
+        messageDiv.textContent = "The Computer won!"
+        gameOver();
     }
 }
-let playerScore = 0
-let computerScore = 0
-playGame()
-if (playerScore > computerScore) {
-    console.log("You win the whole game!")
-} else if (computerScore > playerScore) {
-    console.log("The computer wins the whole game!")
-} else if (computerScore == playerScore) {
-   console.log("The game is a tie!")
-} else {
-    console.log("Error, nobody wins!")
+
+function gameOver() {
+    document.querySelectorAll('#buttonsContainer button').forEach(elem => {
+        elem.disabled = true;
+      });
+    const playAgainButton = document.createElement("button");
+    playAgainButton.textContent = "Play Again";
+    body.appendChild(playAgainButton);
+    
+    // start new game
+    playAgainButton.addEventListener("click", () => {
+        body.removeChild(playAgainButton);
+
+        document.querySelectorAll('#buttonsContainer button').forEach(elem => {
+            elem.disabled = false;
+        });
+        
+        playerScore = 0;
+        computerScore = 0;
+        scoreDiv.textContent = `Player Score: ${playerScore} Computer Score: ${computerScore}`
+    })
 }
+
+buttonsContainer.addEventListener("click", (event) => {
+    let target = event.target;
+    let computerSelection = getComputerChoice();
+    let playerSelection;
+
+    switch(target.id) {
+        case "rock":
+            playerSelection = "rock";
+            playRound(playerSelection, computerSelection);
+            break;
+        case "paper":
+            playerSelection = "paper";
+            playRound(playerSelection, computerSelection);
+            break;
+        case "scissors":
+            playerSelection = "scissors";
+            playRound(playerSelection, computerSelection);
+            break;
+    }
+})
